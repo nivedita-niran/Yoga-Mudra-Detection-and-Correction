@@ -1,0 +1,5 @@
+0 JnanaMudra
+1 ChinMudra
+2 BhairavaMudra
+3 AkashaMudra
+4 PrithviMudra

@@ -1,0 +1,6 @@
+cvzone==1.6.1
+numpy==2.2.1
+opencv-contrib-python==4.10.0.84
+opencv-python==4.10.0.84
+setuptools==75.6.0
+wheel==0.45.1

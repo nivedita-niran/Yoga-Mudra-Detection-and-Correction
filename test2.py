@@ -1,0 +1,92 @@
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+import numpy as np
+import math
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from tensorflow.keras.layers import DepthwiseConv2D
+
+# Define a custom version of DepthwiseConv2D that ignores 'groups'
+def custom_depthwise_conv2d(*args, **kwargs):
+    kwargs.pop('groups', None)  # Remove 'groups' if it exists
+    return DepthwiseConv2D(*args, **kwargs)
+
+# Manually load the model with custom objects
+model_path = "/Users/niveditaniran/Desktop/Model/keras_model.h5"
+labels_path = "/Users/niveditaniran/Desktop/Model/labels.txt"
+model = load_model(model_path, custom_objects={'DepthwiseConv2D': custom_depthwise_conv2d})
+
+# Assuming Classifier uses the model for prediction
+class Classifier:
+    def __init__(self, model):
+        self.model = model
+        with open(labels_path, 'r') as f:
+            self.labels = f.read().splitlines()
+
+    def getPrediction(self, img, draw=True):
+        img = cv2.resize(img, (224, 224))  # Adjust input size as per your model
+        img = np.expand_dims(img, axis=0)  # Add batch dimension
+        img = img / 255.0  # Normalize if needed (depends on model)
+        
+        prediction = self.model.predict(img)
+        predicted_class = np.argmax(prediction)
+        confidence = prediction[0][predicted_class]
+        
+        if draw:
+            return self.labels[predicted_class], confidence
+        return self.labels[predicted_class]  # Only return the label if not drawing
+
+# Instantiate Classifier with the manually loaded model
+classifier = Classifier(model)
+
+cap = cv2.VideoCapture(0)
+detector = HandDetector(maxHands=1)
+offset = 20
+imgSize = 300
+counter = 0
+
+labels = ["JnanaMudra", "ChinMudra", "BhairavaMudra"]
+
+while True:
+    success, img = cap.read()
+    imgOutput = img.copy()
+    hands, img = detector.findHands(img)
+    if hands:
+        hand = hands[0]
+        x, y, w, h = hand['bbox']
+
+        imgWhite = np.ones((imgSize, imgSize, 3), np.uint8) * 255
+
+        imgCrop = img[y - offset:y + h + offset, x - offset:x + w + offset]
+        imgCropShape = imgCrop.shape
+
+        aspectRatio = h / w
+
+        if aspectRatio > 1:
+            k = imgSize / h
+            wCal = math.ceil(k * w)
+            imgResize = cv2.resize(imgCrop, (wCal, imgSize))
+            imgResizeShape = imgResize.shape
+            wGap = math.ceil((imgSize - wCal) / 2)
+            imgWhite[:, wGap:wCal + wGap] = imgResize
+            prediction = classifier.getPrediction(imgWhite, draw=False)  # Now only returning label
+            print(prediction)
+
+        else:
+            k = imgSize / w
+            hCal = math.ceil(k * h)
+            imgResize = cv2.resize(imgCrop, (imgSize, hCal))
+            imgResizeShape = imgResize.shape
+            hGap = math.ceil((imgSize - hCal) / 2)
+            imgWhite[hGap:hCal + hGap, :] = imgResize
+            prediction = classifier.getPrediction(imgWhite, draw=False)  # Now only returning label
+
+        cv2.rectangle(imgOutput, (x - offset, y - offset - 70), (x - offset + 400, y - offset + 60 - 50), (0, 255, 0), cv2.FILLED)
+        cv2.putText(imgOutput, prediction, (x, y - 30), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 0), 2)
+        cv2.rectangle(imgOutput, (x - offset, y - offset), (x + w + offset, y + h + offset), (0, 255, 0), 4)
+
+        cv2.imshow('ImageCrop', imgCrop)
+        cv2.imshow('ImageWhite', imgWhite)
+
+    cv2.imshow('Image', imgOutput)
+    cv2.waitKey(1)
