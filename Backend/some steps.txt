@@ -1,0 +1,9 @@
+step 1 : install mongodb atlas 
+step 2 : npm install mongoose dotenv //run in terminal to install dependencies 
+step 3 : create a .env file // its there in this backend folder 
+step 4 : create a server.js file //there in this folder 
+step 5 : npm run dev //run in terminal 
+an output should come in terminal : ✅ MongoDB connected successfully
+🚀 Server running on port 5000
+
+
