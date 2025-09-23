@@ -1,0 +1,66 @@
+/* src/App.css */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f6fdf9;
+  color: #2e3d2f;
+  text-align: center;
+}
+
+nav {
+  background-color: #d8e6d0;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+nav h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2f4f4f;
+  cursor: pointer;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+nav li {
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+nav li:hover {
+  color: #3a6351;
+}
+
+main {
+  padding: 30px;
+}
+
+h2 {
+  color: #3a6351;
+}
+
+button {
+  background-color: #a8d5ba;
+  border: none;
+  padding: 10px 15px;
+  margin: 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #91c7a5;
+}

@@ -1,0 +1,36 @@
+.mudra-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.mudra-item {
+  position: relative;
+  width: 200px;
+  cursor: pointer;
+}
+
+.mudra-item img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+  background-color: rgba(0,0,0,0.6);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 0 0 8px 8px;
+}
+
+.mudra-item:hover .overlay {
+  opacity: 1;
+}
