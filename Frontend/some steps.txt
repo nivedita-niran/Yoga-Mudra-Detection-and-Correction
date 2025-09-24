@@ -1,0 +1,21 @@
+step 1: Open the terminal. It should be pointing to the directory of ur project 
+step 2 : npx create-react-app frontend //run this command to create a react app
+step 3: after creating, run npm start. The react logo will appear at ur webpage in the url localhost : 3000
+
+while running some code, u may get vulnerabilities like a warning. The warning can be ignored, if u want to fix only do 
+npm audit fix 
+Do not go for fix --force as this makes react-scripts to 0.0.0 which will make u not able to run the react app
+
+step 4 : in some step u woulf require to install react router dom so, 
+npm install react-router-dom //this installs react router dom for navigation
+
+frontend/
+├─ src/
+│  ├─ App.js         ← paste the above code
+│  ├─ App.css        ← your main CSS file
+│  ├─ index.js       ← wraps App in BrowserRouter
+│  └─ pages/
+│     ├─ Home.js
+│     ├─ MudraDetection.js
+│     └─ Progress.js
+The above is a folder structure as i have put in the repository
